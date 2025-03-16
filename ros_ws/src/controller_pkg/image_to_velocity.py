@@ -62,6 +62,8 @@ class PathFollower:
         @return velocity Twist message containing data for movement adjusted for current and desired trajectory
         @return processed_image a NumPy array of the binarized image, for display and debugging purposes
         """
+
+        # Image preprocessing
         # Convert to grayscale
         gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
 
