@@ -55,53 +55,69 @@ class PathFollower:
         except CvBridgeError as e:
             rospy.logerr("CvBridge error: %s", str(e))
 
-    def process_image(self, cv_image):
+    def process_image(self, cam_raw):
         """ 
         @brief Process the image to detect the path and compute velocity commands 
-        @param cv_image contains image data in OpenCV format
+        @param cam_raw contains image data in ROS image format
         @return velocity Twist message containing data for movement adjusted for current and desired trajectory
         @return processed_image a NumPy array of the binarized image, for display and debugging purposes
         """
+        try:
+            # Convert the ROS Image message to an OpenCV image
+            cv_image = self.bridge.imgmsg_to_cv2(cam_raw, desired_encoding="bgr8")
 
-        # Image preprocessing
-        # Convert to grayscale
-        gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
+            height = cv_image.shape[0]
+            width = cv_image.shape[1]
 
-        # Binarize: Keep only dark regions (assumed to be the path)
-        _, binary = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY_INV)
+            # Convert to grayscale
+            gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
 
-        # Find contours of the path
-        contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            # Blurr Background
+            blurred = cv2.GaussianBlur(gray, (5, 5), 0)
 
-        velocity = Twist()
+            # Bin Map
+            thresh = 127 ## play around with this value
+            ret, frame_bin = cv2.threshold(blurred, thresh, 255, 0)
 
-        if contours:
-            # Find the largest contour (assuming it's the path)
-            largest_contour = max(contours, key=cv2.contourArea)
-            
-            # Get the center of the contour
-            M = cv2.moments(largest_contour)
-            if M["m00"] != 0:
-                cx = int(M["m10"] / M["m00"])  # X position of path center
-                cy = int(M["m01"] / M["m00"])  # Y position (not used here)
+            row_of_interest = height - 20  # Line 50 pixels from the bottom
+            line_data = frame_bin[row_of_interest, 0:width]  # Extract the specific row
+            right_found = False
+            left_found = False
 
-                # Get image center
-                height, width = binary.shape
-                image_center = width // 2  # Middle of the image
+            leftmost = 0
+            rightmost = 0
 
-                # Compute error: how far the path is from the center
-                error = image_center - cx
+            for x in range(len(line_data)):
+                # Get the leftmost and rightmost points
+                if not left_found and line_data[x] == 0:
+                    leftmost = x
+                    left_found = True
+                if not right_found and line_data[width - 2 - x] == 0:
+                    rightmost = width - 1 - x
+                    right_found = True
+            if right_found and left_found:
+                # Calculate the midpoint
+                midpoint = (leftmost + rightmost) // 2
 
-                # Proportional control for steering
-                Kp = 0.005  # Tune this value to adjust turning sensitivity
-                velocity.linear.x = 0.2  # Constant forward speed
-                velocity.angular.z = Kp * error  # Steer towards the path center
+                # Find how far off we are from being centered
+                error = midpoint - width/2
 
-                # Draw center lines for debugging
-                cv2.line(binary, (cx, 0), (cx, height), (128, 128, 128), 2)  # Path center
-                cv2.line(binary, (image_center, 0), (image_center, height), (255, 255, 255), 2)  # Image center
+                rate = rospy.Rate(2)
+                self.twist.linear.x = 0.5
+                self.twist.angular.z = -error * 0.005
 
-        return velocity, binary
+                # Publish movement command
+                self.pub.publish(self.twist)
+            else:
+                self.twist.linear.x = 0
+                self.twist.angular.z = 0
+                self.pub.publish(self.twist)
+            # Show the processed image
+            cv2.imshow("Binary Map", frame_bin)
+            cv2.waitKey(1)
+
+        except Exception as e:
+            rospy.logerr(f"Error processing image: {e}")
 
 if __name__ == '__main__':
     try:
