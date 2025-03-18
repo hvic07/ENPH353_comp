@@ -23,6 +23,4 @@
 		<include file="$(find enph353_utils)/launch/desktop.launch"/>
 	</group>
 
-	<node pkg="controller_pkg" type="image_to_velocity.py" name="image_to_velocity" output="screen"/>
-
 </launch>
