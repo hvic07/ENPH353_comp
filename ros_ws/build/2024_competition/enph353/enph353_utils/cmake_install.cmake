@@ -1,8 +1,8 @@
-# Install script for directory: /home/hannahcha/ros_ws/src/2024_competition/enph353/enph353_utils
+# Install script for directory: /home/fizzer/ENPH353_comp/ros_ws/src/2024_competition/enph353/enph353_utils
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/hannahcha/ros_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/fizzer/ENPH353_comp/ros_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,37 +38,37 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enph353_utils/cmake" TYPE FILE FILES "/home/hannahcha/ros_ws/build/2024_competition/enph353/enph353_utils/catkin_generated/installspace/enph353_utils-msg-paths.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enph353_utils/cmake" TYPE FILE FILES "/home/fizzer/ENPH353_comp/ros_ws/build/2024_competition/enph353/enph353_utils/catkin_generated/installspace/enph353_utils-msg-paths.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/hannahcha/ros_ws/devel/share/roseus/ros/enph353_utils")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/fizzer/ENPH353_comp/ros_ws/devel/share/roseus/ros/enph353_utils")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/hannahcha/ros_ws/devel/lib/python3/dist-packages/enph353_utils")
+  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/fizzer/ENPH353_comp/ros_ws/devel/lib/python3/dist-packages/enph353_utils")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/hannahcha/ros_ws/devel/lib/python3/dist-packages/enph353_utils")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/fizzer/ENPH353_comp/ros_ws/devel/lib/python3/dist-packages/enph353_utils")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/hannahcha/ros_ws/build/2024_competition/enph353/enph353_utils/catkin_generated/installspace/enph353_utils.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/fizzer/ENPH353_comp/ros_ws/build/2024_competition/enph353/enph353_utils/catkin_generated/installspace/enph353_utils.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enph353_utils/cmake" TYPE FILE FILES "/home/hannahcha/ros_ws/build/2024_competition/enph353/enph353_utils/catkin_generated/installspace/enph353_utils-msg-extras.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enph353_utils/cmake" TYPE FILE FILES "/home/fizzer/ENPH353_comp/ros_ws/build/2024_competition/enph353/enph353_utils/catkin_generated/installspace/enph353_utils-msg-extras.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enph353_utils/cmake" TYPE FILE FILES
-    "/home/hannahcha/ros_ws/build/2024_competition/enph353/enph353_utils/catkin_generated/installspace/enph353_utilsConfig.cmake"
-    "/home/hannahcha/ros_ws/build/2024_competition/enph353/enph353_utils/catkin_generated/installspace/enph353_utilsConfig-version.cmake"
+    "/home/fizzer/ENPH353_comp/ros_ws/build/2024_competition/enph353/enph353_utils/catkin_generated/installspace/enph353_utilsConfig.cmake"
+    "/home/fizzer/ENPH353_comp/ros_ws/build/2024_competition/enph353/enph353_utils/catkin_generated/installspace/enph353_utilsConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enph353_utils" TYPE FILE FILES "/home/hannahcha/ros_ws/src/2024_competition/enph353/enph353_utils/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enph353_utils" TYPE FILE FILES "/home/fizzer/ENPH353_comp/ros_ws/src/2024_competition/enph353/enph353_utils/package.xml")
 endif()
 

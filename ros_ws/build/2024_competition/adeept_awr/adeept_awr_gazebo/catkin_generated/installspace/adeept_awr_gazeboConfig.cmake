@@ -67,14 +67,14 @@ set(adeept_awr_gazebo_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(adeept_awr_gazebo_SOURCE_PREFIX /home/hannahcha/ros_ws/src/2024_competition/adeept_awr/adeept_awr_gazebo)
-  set(adeept_awr_gazebo_DEVEL_PREFIX /home/hannahcha/ros_ws/devel)
+  set(adeept_awr_gazebo_SOURCE_PREFIX /home/fizzer/ENPH353_comp/ros_ws/src/2024_competition/adeept_awr/adeept_awr_gazebo)
+  set(adeept_awr_gazebo_DEVEL_PREFIX /home/fizzer/ENPH353_comp/ros_ws/devel)
   set(adeept_awr_gazebo_INSTALL_PREFIX "")
   set(adeept_awr_gazebo_PREFIX ${adeept_awr_gazebo_DEVEL_PREFIX})
 else()
   set(adeept_awr_gazebo_SOURCE_PREFIX "")
   set(adeept_awr_gazebo_DEVEL_PREFIX "")
-  set(adeept_awr_gazebo_INSTALL_PREFIX /home/hannahcha/ros_ws/install)
+  set(adeept_awr_gazebo_INSTALL_PREFIX /home/fizzer/ENPH353_comp/ros_ws/install)
   set(adeept_awr_gazebo_PREFIX ${adeept_awr_gazebo_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/hannahcha/ros_ws/install/lib;/opt/ros/noetic/lib)
+    foreach(path /home/fizzer/ENPH353_comp/ros_ws/install/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

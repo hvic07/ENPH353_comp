@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/hannahcha/ros_ws/devel/share/gennodejs/ros/enph353_gazebo/srv/GetLegalPlates.js"
-  "/home/hannahcha/ros_ws/devel/share/gennodejs/ros/enph353_gazebo/srv/SubmitPlate.js"
+  "/home/fizzer/ENPH353_comp/ros_ws/devel/share/gennodejs/ros/enph353_gazebo/srv/GetLegalPlates.js"
+  "/home/fizzer/ENPH353_comp/ros_ws/devel/share/gennodejs/ros/enph353_gazebo/srv/SubmitPlate.js"
   "CMakeFiles/enph353_gazebo_generate_messages_nodejs"
 )
 

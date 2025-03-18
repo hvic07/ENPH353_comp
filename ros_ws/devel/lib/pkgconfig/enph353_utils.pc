@@ -1,4 +1,4 @@
-prefix=/home/hannahcha/ros_ws/devel
+prefix=/home/fizzer/ENPH353_comp/ros_ws/devel
 
 Name: enph353_utils
 Description: Description of enph353_utils

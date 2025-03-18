@@ -1,8 +1,8 @@
-# Install script for directory: /home/hannahcha/ros_ws/src/2024_competition/enph353/enph353_npcs
+# Install script for directory: /home/fizzer/ENPH353_comp/ros_ws/src/2024_competition/enph353/enph353_npcs
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/hannahcha/ros_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/fizzer/ENPH353_comp/ros_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/hannahcha/ros_ws/build/2024_competition/enph353/enph353_npcs/catkin_generated/installspace/enph353_npcs.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/fizzer/ENPH353_comp/ros_ws/build/2024_competition/enph353/enph353_npcs/catkin_generated/installspace/enph353_npcs.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enph353_npcs/cmake" TYPE FILE FILES
-    "/home/hannahcha/ros_ws/build/2024_competition/enph353/enph353_npcs/catkin_generated/installspace/enph353_npcsConfig.cmake"
-    "/home/hannahcha/ros_ws/build/2024_competition/enph353/enph353_npcs/catkin_generated/installspace/enph353_npcsConfig-version.cmake"
+    "/home/fizzer/ENPH353_comp/ros_ws/build/2024_competition/enph353/enph353_npcs/catkin_generated/installspace/enph353_npcsConfig.cmake"
+    "/home/fizzer/ENPH353_comp/ros_ws/build/2024_competition/enph353/enph353_npcs/catkin_generated/installspace/enph353_npcsConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enph353_npcs" TYPE FILE FILES "/home/hannahcha/ros_ws/src/2024_competition/enph353/enph353_npcs/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/enph353_npcs" TYPE FILE FILES "/home/fizzer/ENPH353_comp/ros_ws/src/2024_competition/enph353/enph353_npcs/package.xml")
 endif()
 

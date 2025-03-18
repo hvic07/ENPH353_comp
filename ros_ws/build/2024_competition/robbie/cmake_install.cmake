@@ -1,8 +1,8 @@
-# Install script for directory: /home/hannahcha/ros_ws/src/2024_competition/robbie
+# Install script for directory: /home/fizzer/ENPH353_comp/ros_ws/src/2024_competition/robbie
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/hannahcha/ros_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/fizzer/ENPH353_comp/ros_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/hannahcha/ros_ws/build/2024_competition/robbie/catkin_generated/installspace/robbie.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/fizzer/ENPH353_comp/ros_ws/build/2024_competition/robbie/catkin_generated/installspace/robbie.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robbie/cmake" TYPE FILE FILES
-    "/home/hannahcha/ros_ws/build/2024_competition/robbie/catkin_generated/installspace/robbieConfig.cmake"
-    "/home/hannahcha/ros_ws/build/2024_competition/robbie/catkin_generated/installspace/robbieConfig-version.cmake"
+    "/home/fizzer/ENPH353_comp/ros_ws/build/2024_competition/robbie/catkin_generated/installspace/robbieConfig.cmake"
+    "/home/fizzer/ENPH353_comp/ros_ws/build/2024_competition/robbie/catkin_generated/installspace/robbieConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robbie" TYPE FILE FILES "/home/hannahcha/ros_ws/src/2024_competition/robbie/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robbie" TYPE FILE FILES "/home/fizzer/ENPH353_comp/ros_ws/src/2024_competition/robbie/package.xml")
 endif()
 

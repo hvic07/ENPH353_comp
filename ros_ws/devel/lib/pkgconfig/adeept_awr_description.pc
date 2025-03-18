@@ -1,4 +1,4 @@
-prefix=/home/hannahcha/ros_ws/devel
+prefix=/home/fizzer/ENPH353_comp/ros_ws/devel
 
 Name: adeept_awr_description
 Description: Description of adeept_awr_description

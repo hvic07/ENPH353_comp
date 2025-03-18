@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/hannahcha/ros_ws/devel/include/enph353_gazebo/GetLegalPlates.h"
-  "/home/hannahcha/ros_ws/devel/include/enph353_gazebo/SubmitPlate.h"
+  "/home/fizzer/ENPH353_comp/ros_ws/devel/include/enph353_gazebo/GetLegalPlates.h"
+  "/home/fizzer/ENPH353_comp/ros_ws/devel/include/enph353_gazebo/SubmitPlate.h"
   "CMakeFiles/enph353_gazebo_generate_messages_cpp"
 )
 
