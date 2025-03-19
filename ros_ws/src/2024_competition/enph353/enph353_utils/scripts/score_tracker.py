@@ -3,6 +3,7 @@ from datetime import datetime
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import (QPixmap)
 from PyQt5.QtCore import (Qt, QTimer, pyqtSignal)
+from PyQt5.QtWidgets import QLabel
 from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 from openai import OpenAI
@@ -13,6 +14,7 @@ import os
 import requests
 import rospy
 import sys
+import time
 
 NUM_LOCATIONS = 8
 
@@ -64,6 +66,7 @@ class Window(QtWidgets.QMainWindow):
         self.timer.timeout.connect(self.SLOT_timer_update)
         self.timerStarted = False
         self.elapsed_time_s = 0
+        self.elapsed_time_value_QL = self.findChild(QLabel, "elapsed_time_value_QL")
 
         # Initialize other variables:
         self.bonus_points = 0
@@ -90,9 +93,11 @@ class Window(QtWidgets.QMainWindow):
                                                   self.score_tracker_callback)
         self.sub_cmd_vel = rospy.Subscriber("/R1/cmd_vel", Twist,
                                             self.cmd_vel_callback)
-        
+
         # Register ROS node
         rospy.init_node('competition_listener')
+
+        self.start_timer()
 
     def cmd_vel_callback(self, data):
         '''
@@ -238,7 +243,7 @@ class Window(QtWidgets.QMainWindow):
         ROUND_DURATION_s = 240
         self.elapsed_time_s += 1
         self.sim_current_time_s = rospy.get_time()
-        sim_time_s = self.sim_current_time_s - self.sim_start_time_s
+        sim_time_s = time.time() - self.sim_start_time_s
         self.elapsed_time_value_QL.setText(
             "{:03d} sec".format(int(sim_time_s)))
         if (sim_time_s > ROUND_DURATION_s):
@@ -249,13 +254,12 @@ class Window(QtWidgets.QMainWindow):
 
     def start_timer(self):
         self.elapsed_time_s = 0
-        self.sim_start_time_s = rospy.get_time()
+        self.sim_start_time_s = time.time()
         self.elapsed_time_value_QL.setText(
             "{:03d} sec".format(self.elapsed_time_s))
         self.timer.start(1000)
         self.timerStarted = True
         self.log_msg("Timer started.")
-
 
     def stop_timer(self):
         '''
@@ -380,5 +384,4 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = Window()
     window.show()
-
     sys.exit(app.exec_())
