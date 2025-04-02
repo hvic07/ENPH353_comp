@@ -27,6 +27,8 @@ from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropou
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import load_model # to introduce trained model
 
+from Levenshtein import distance
+
 class ClueReader:
     '''
     @class PathFollower
@@ -39,10 +41,15 @@ class ClueReader:
         rospy.init_node('clue_reader', anonymous=True)
 
         # Load neural network
-        self.clue_mod = load_model('/home/hannahcha/comp_enph/ros_ws/src/controller_pkg/src/clue_reader_models/clue_reader.h5')
+        self.clue_mod = load_model('/home/hannahcha/comp_enph/ros_ws/src/controller_pkg/src/clue_reader_models/model(5).h5')
 
         self.teamname = 'fabs'
         self.password = '9'
+
+        # variables to compare when checking if signs of frames are to be read
+        self.prev_clue = ""
+        self.prev_title = ""
+        self.title_read_count = 0
 
         # Subscribe to the image topic
         self.image_sub = rospy.Subscriber('/B1/pi_camera/image_raw', Image, self.image_callback)
@@ -84,20 +91,19 @@ class ClueReader:
         @return String message containing clue data
         @return processed_image a NumPy array of the binarized image, for display and debugging purposes
         """
-        # define lower and upper bounds for character mask
-        lower_bound = np.array[(120, 120, 50)] # edit these for later
-        upper_bound = np.array[(125, 255, 255)]
 
         try:
 
             # initialize variables ----------
             title_chars = [] # store title characters here
             clue_chars = [] # store clue characters here
+            sorted_title_chars = []
+            sorted_clue_chars = []
             title = ""
             clue = ""
 
             lower_bound_sign = np.array([90, 50, 0])    # lower bound blue
-            upper_bound_sign = np.array([120, 255, 190])   # upper bound blue
+            upper_bound_sign = np.array([255, 255, 190])   # upper bound blue
             lower_bound_letters = np.array([50, 50, 0])    # lower bound blue
             upper_bound_letters = np.array([255, 255, 255])   # upper bound blue
 
@@ -193,37 +199,74 @@ class ClueReader:
 
                     # store in title or clue, depending on y coordinate
                     if letter_y < split_point:
-                        title_chars.append(letter_img)
+                        title_chars.append([letter_img, letter_x])
                     else:
-                        clue_chars.append(letter_img)
+                        clue_chars.append([letter_img, letter_x])
+
+                    # sort left to right
+                    sorted_title_chars =  [img for img, x in sorted(title_chars, key=lambda item: item[1])]
+                    sorted_clue_chars = [img for img, x in sorted(clue_chars, key=lambda item: item[1])]
                 # if for letter
             # if for each word
 
-            model = load_model("PATH TO MODEL HERE")
-            characters = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")  # Define list of possible characters
+            characters = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")  # Define list of possible characters
 
-            for char in title_chars:
-                char = char.reshape(1, *char.reshape) # add batch dimension
-                pred_vector = model.predict(char)
+            # predict characters (title and clue)
+            for char in sorted_title_chars:
+                char = char.reshape(1, *char.shape) # add batch dimension
+                pred_vector = self.clue_mod.predict(char)
                 pred_label = characters[np.argmax(pred_vector)]  # Convert prediction to character
                 title += pred_label
 
-            for char in clue_chars:
-                char = char.reshape(1, *char.reshape) # add batch dimension
-                pred_vector = model.predict(char)
+            for char in sorted_clue_chars:
+                char = char.reshape(1, *char.shape) # add batch dimension
+                pred_vector = self.clue_mod.predict(char)
                 pred_label = characters[np.argmax(pred_vector)]  # Convert prediction to character
                 clue += pred_label
+            
+            # self.score_pub.publish(f'fabs,password,{title},{clue}')
 
+            # check if valid clue
+            if title == self.prev_title and clue == self.prev_clue and clue != "":# if title and clue are same as previous
+                self.title_read_count += 1
+                if self.title_read_count > 2:
+                    clue_num = self.which_clue(title)
+                    if clue_num != None:
+                        # code to publish to score tracker
+                        self.score_pub.publish(f'fabs,password,{clue_num},{clue}')
+                        self.title_read_count = 0
+            else:
+                self.title_read_count = 0
+
+            self.prev_title = title
+            self.prev_clue = clue
+                    
             # publish to score tracker
-            self.score_pub.publish(f'fabs,password,1,{clue}')
+            # self.score_pub.publish(f'fabs,password,{clue_num},{clue}')
 
         # # try
         except Exception as e:
             rospy.logerr(f"Error processing image: {e}")
 
+    def which_clue(self, det_title):
+
+        clues = ["SIZE", "VICTIM", "CRIME", "TIME", "PLACE", "MOTIVE", "WEAPON", "BANDIT"]
+        
+        accuracy_arr = [distance(det_title, clue) for clue in clues]
+
+        if any(a is None for a in accuracy_arr):  # Safety check
+            raise ValueError("distance() returned None for some values.")
+
+        if min(accuracy_arr) < 2:
+            clue_index = accuracy_arr.index(min(accuracy_arr))  # Find best match
+            return clue_index + 1
+        else:
+            return None
+
+
 if __name__ == '__main__':
     try:
         node = ClueReader()
-        # rospy.spin()
+        rospy.spin()
     except rospy.ROSInterruptException:
         pass
