@@ -6,6 +6,8 @@
 
 import rospy
 from geometry_msgs.msg import Twist
+from gazebo_msgs.msg import ModelState
+from gazebo_msgs.srv import SetModelState
 from std_msgs.msg import String 
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
@@ -24,129 +26,223 @@ class PathFollower:
         """
         rospy.init_node('path_follower', anonymous=True)
 
-        # Subscribe to the image topic
-        self.image_sub = rospy.Subscriber('/B1/pi_camera/image_raw', Image, self.image_callback)
-
         # Publisher for velocity commands
         self.vel_pub = rospy.Publisher('/B1/cmd_vel', Twist, queue_size=10)
 
         # Publisher for score tracking
         self.score_pub = rospy.Publisher('/score_tracker', String, queue_size=1)
-
-        # # Publisher for debugging image
-        # self.debug_img_pub = rospy.Publisher('/debug/image_processed', Image, queue_size=1)
-
-        self.bridge = CvBridge()
-        
-        self.timer_initialized = False
-        self.time_stopped = False
-        self.timeout = 0
-        self.TIMEOUT_THRESHOLD = 10
         
         self.twist = Twist()
+        rospy.sleep(2)
+        self.move()
+
+    def move(self):
+        self.score_pub.publish('fabs,nopassword,0,NA')
+        ############ ROAD #######################
+        rospy.sleep(5)
+
+        # initial full send
+        self.twist.linear.x = 2.0
+        self.twist.angular.z = 0.0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(3.9)
+
+        # pause for clue 2
+        self.twist.linear.x = 0.0
+        self.twist.angular.z = 0.0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(3.0)
+
+        # continue to bend
+        self.twist.linear.x = 2.0
+        self.twist.angular.z = 0.0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(2.4)
+
+        # turn around bend
+        self.twist.linear.x = 0.0
+        self.twist.angular.z = -2.0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(1.85)
+
+        self.twist.linear.x = 2.0
+        self.twist.angular.z = 0.0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(1.0)  
+
+        self.twist.linear.x = 0.0
+        self.twist.angular.z = -2.0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(1.0)      
+
+        # stop road sequence
+        self.twist.linear.x = 0.0
+        self.twist.angular.z = 0.0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(4.0)  
+
+        ############ SPAWN TO GRASS ROAD ########
+        self.spawn_position([0.477889, -0.169225, 0.04, 0, 0, -0.7, -0.8732])
         
+        # quick turn adjust
+        self.twist.linear.x = 0.0
+        self.twist.angular.z = 2.0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(0.15)
 
-    def image_callback(self, msg):
-        """
-        @brief  A callback function to handle new incoming images. Converts ROS Image formats to OpenCV,
-                calls the processing function to handle path finding and velocity adjustments. Also publishes a 
-                processed image for debugging purposes (shows a window of the camera's pov)
-        @param  msg contains image data
-        """
+        # quick rear run!
+        self.twist.linear.x = -2.5
+        self.twist.angular.z = 0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(1.1)   
+
+        # pause to read clue
+        self.twist.linear.x = 0
+        self.twist.angular.z = 0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(2.0)     
+
+        # send dis bitch!
+        self.twist.linear.x = 4.0
+        self.twist.angular.z = 0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(2.2)
+
+        # 180!
+        self.twist.linear.x = 0
+        self.twist.angular.z = -4.0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(1.4)
+
+        self.twist.angular.z = 0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(2.5)
+
+        self.twist.linear.x = 0
+        self.twist.angular.z = -4.0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(0.5)
+
+        self.twist.linear.x = 0
+        self.twist.angular.z = 0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(0.8)
+
+        self.twist.linear.x = 4.0
+        self.twist.angular.z = 0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(0.45)
+
+        self.twist.linear.x = 0.0
+        self.twist.angular.z = -4.0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(1.0)
+
+        # SEND ACROSS BRIDGE!!!!
+        self.twist.linear.x = 5.0
+        self.twist.angular.z = 0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(1.7)
+
+        self.twist.linear.x = 0
+        self.twist.angular.z = 0
+        self.vel_pub.publish(self.twist)
+        rospy.sleep(3.0)
+
+        self.spawn_position([-4.0921, -2.3015, 0.04, 0, 0, 0, -0.8732])
+
+        rospy.sleep(0.5)
+
+        ################ LONG STRETCH ########################
+
+        # self.twist.linear.x = 0
+        # self.twist.angular.z = -2
+        # self.vel_pub.publish(self.twist)
+
+        # rospy.sleep(1.67)
+
+        # self.twist.linear.x = 1
+        # self.twist.angular.z = 0
+        # self.vel_pub.publish(self.twist)
+
+        # rospy.sleep(10.15)
+
+        # ############### BEGIN OFF ROAD #########################
+
+        # self.twist.linear.x = 0
+        # self.twist.angular.z = 2
+        # self.vel_pub.publish(self.twist)
+
+        # rospy.sleep(1.7)
+
+        # self.twist.linear.x = 1
+        # self.twist.angular.z = 0
+        # self.vel_pub.publish(self.twist)
+
+        # rospy.sleep(7.5)
+
+        # self.twist.linear.x = 0
+        # self.twist.angular.z = -2
+        # self.vel_pub.publish(self.twist)
+
+        # rospy.sleep(1)
+
+        # self.twist.linear.x = 1
+        # self.twist.angular.z = 0
+        # self.vel_pub.publish(self.twist)
+
+        # rospy.sleep(2)
+
+        # ############### ALIGN TUNNEL ############################
+
+        # self.twist.linear.x = 0
+        # self.twist.angular.z = 2
+        # self.vel_pub.publish(self.twist)
+
+        # rospy.sleep(1.3)
+
+
+        # self.twist.linear.x = 1
+        # self.twist.angular.z = 0
+        # self.vel_pub.publish(self.twist)
+
+        # rospy.sleep(1.25)
+
+        # self.twist.linear.x = 0
+        # self.twist.angular.z = 2
+        # self.vel_pub.publish(self.twist)
+
+        # rospy.sleep(1.3)
+
+        print('sleeping')
+        self.twist.linear.x = 0
+        self.twist.angular.z = 0
+        self.vel_pub.publish(self.twist)
+
+        rospy.sleep(1.5)
+        return
+    
+    def spawn_position(self, position):
+
+        msg = ModelState()
+        msg.model_name = 'B1'
+
+        msg.pose.position.x = position[0]
+        msg.pose.position.y = position[1]
+        msg.pose.position.z = position[2]
+        msg.pose.orientation.x = position[3]
+        msg.pose.orientation.y = position[4]
+        msg.pose.orientation.z = position[5]
+        msg.pose.orientation.w = position[6]
+
+        rospy.wait_for_service('/gazebo/set_model_state')
         try:
-            # Convert ROS Image message to OpenCV format
-            cv_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+            set_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
+            resp = set_state( msg )
 
-            # Process the image and get velocity commands
-            self.process_image(cv_image)
+        except rospy.ServiceException:
+            print ("Service call failed")
 
-            # Publish velocity command
-            # self.vel_pub.publish(velocity)
-
-            # Publish processed image for debugging
-            # debug_msg = self.bridge.cv2_to_imgmsg(processed_image, "mono8")
-            # self.debug_img_pub.publish(debug_msg)
-
-        except CvBridgeError as e:
-            rospy.logerr("CvBridge error: %s", str(e))
-
-    def process_image(self, cv_image):
-        """ 
-        @brief Process the image to detect the path and compute velocity commands 
-        @param cam_raw contains image data in ROS image format
-        @return velocity Twist message containing data for movement adjusted for current and desired trajectory
-        @return processed_image a NumPy array of the binarized image, for display and debugging purposes
-        """
-        try:
-            # self.score_pub.publish('fabs,password,0,NA')
-            # Convert the ROS Image message to an OpenCV image
-            # cv_image = self.bridge.imgmsg_to_cv2(cam_raw, desired_encoding="bgr8")
-            if self.timer_initialized == False:
-                rospy.sleep(1)
-                self.score_pub.publish('fabs,password,0,NA')
-                self.timer_initialized = True
-                
-                
-            
-            height = cv_image.shape[0]
-            width = cv_image.shape[1]
-            blurred = cv2.blur(cv_image, (12, 12))
-            # Convert to grayscale
-            hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
-            road_lr = np.array([0, 0, 65])
-            road_ur = np.array([0, 0, 90])
-            mask = cv2.inRange(hsv, road_lr, road_ur)
-            # Show the processed image
-
-            row_of_interest = height - 100  # Line 75 pixels from the bottom
-            line_data = mask[row_of_interest, 0:width]  # Extract the specific row
-            right_found = False
-            left_found = False
-
-            leftmost = 0
-            rightmost = width - 1
-
-            for x in range(len(line_data)):
-                # Get the leftmost and rightmost points
-                if not left_found and line_data[x] == 255:
-                    leftmost = x
-                    left_found = True
-                if not right_found and line_data[width - 2 - x] == 255:
-                    rightmost = width - 1 - x
-                    right_found = True
-            if right_found or left_found:
-                self.timeout = 0
-                # Calculate the midpoint
-                midpoint = (leftmost + rightmost) // 2
-
-                # Find how far off we are from being centered
-                error = midpoint - width/2
-
-                rate = rospy.Rate(2)
-                self.twist.linear.x = 0.5
-                self.twist.angular.z = -error * 0.008
-
-                # Publish movement command
-                self.vel_pub.publish(self.twist)
-
-                cv2.circle(cv_image, (int(midpoint), row_of_interest), 20, (255,0,0), -1)
-            else:
-                self.vel_pub.publish(self.twist)
-                self.timeout += 1
-                cv2.circle(cv_image, (int(width/2), row_of_interest), 20, (255,0,0), -1)
-                if self.timeout >= self.TIMEOUT_THRESHOLD and self.time_stopped == False:
-                    self.twist.linear.x = 0
-                    self.twist.angular.z = 0
-                    self.vel_pub.publish(self.twist)
-                    self.score_pub.publish('fabs,password,-1,NA')
-                    self.time_stopped = True
-            cv2.imshow("White Line", cv_image)
-            cv2.waitKey(1)
-
-            cv2.imshow("Mask", mask)
-            cv2.waitKey(1)
-        except Exception as e:
-            rospy.logerr(f"Error processing image: {e}")
 
 if __name__ == '__main__':
     try:
